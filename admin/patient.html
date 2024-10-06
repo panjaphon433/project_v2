@@ -1,0 +1,726 @@
+<!doctype html>
+<html ng-app="patientApp" lang="th">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="patient.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  </head>
+  <body ng-controller="PatientController">
+    <h1 class>ข้อมูลผู้ป่วย</h1>
+    <div class = "container">
+	    ค้นหาข้อมูล : <input type="text" placeholder="ค้นหาข้อมูลผู้ป่วย" ng-model="s.key"/>
+      <button class="btn btn-primary" ng-click="select()">แสดงข้อมูลผู้ป่วย</button>
+        <br/><br/>
+        <table class="table table-hover" striped>
+                <thead>
+                  <tr>
+                    <th>HN</th>
+                    <th>ชื่อ</th>
+                    <th>นามสกุล</th>
+                    <th>วัน/เดือน/ปีเกิด</th>
+                    <th>ที่อยู่</th>
+                    <th>เบอร์โทรศัพท์</th>
+                    <th>กรุ๊ปเลือด</th>
+                    <th>รหัสผ่าน</th>
+                    <th>action</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr ng-repeat = 'val in list'>
+                    <td>{{val.HN}}</td>
+                    <td>{{val.patient_name}}</td>
+                    <td>{{val.patient_lastname}}</td>
+                    <td>{{val.patient_birthday | date:'yyyy-MM-dd'}}</td>
+                    <td>{{val.patient_address}}</td>
+                    <td>{{val.patient_phone}}</td>
+                    <td>{{val.patient_blood}}</td>
+                    <td>{{val.patient_password}}</td>
+                    <td>
+                      <button type="button" className="btn btn-warning" data-bs-toggle="modal" ng-click= "showupdatefrom(val)" data-bs-target="#updateModal" >แก้ไข</button>
+                      <button type="button" className="btn btn-danger" data-bs-toggle="modal" ng-click= "delete(val.HN)">ลบ</button>
+                      <button type="button" className="btn btn-primary" data-bs-toggle="modal" ng-click= "select2(val.HN)" data-bs-target="#aaa" >แสดงข้อมูลผู้ป่วยเพิ่มเติม</button>
+                    </td>   
+                  </tr>
+              
+        </tbody>
+        </table>
+      </div>   
+      </div> 
+    </div>
+
+
+<!-- Modal show data patient-->
+<div class="modal fade" id="aaa" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-hover" striped>
+          <thead>
+            <tr>
+              <th>HN</th>
+              <th>ชื่อ</th>
+              <th>เพศ</th>
+              <th>สัญชาติ</th>
+              <th>เชื้อชาติ</th>
+              <th>ศาสนา</th>
+              <th>วุฒิการศึกษา</th>
+              <th>สถานภาพสมรส</th>
+              <th>อาชีพ</th>
+              <th>สิทธิ</th>
+              <th>ชื่อมารดา</th>
+              <th>บัตรประจำตัวประชาชนมารดา</th>
+              <th>ชื่อบิดา</th>
+              <th>บัตรประจำตัวประชาชนบิดา</th>
+              <th>ชื่อคู่สมรส</th>
+              <th>บัตรประจำตัวประชาชนคู่สมรส</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+      
+            <tr ng-repeat = 'val in list2'>
+              <td>{{val.HN}}</td>
+              <td>{{val.patient_name}}</td>
+              <td>{{val.patient_sex}}</td>
+              <td>{{val.patient_nation}}</td>
+              <td>{{val.patient_race}}</td>
+              <td>{{val.patient_religion}}</td>
+              <td>{{val.patient_degree}}</td>
+              <td>{{val.patient_marital}}</td>   
+              <td>{{val.patient_occupation}}</td>   
+              <td>{{val.patient_right}}</td>   
+              <td>{{val.patient_mom}}</td>   
+              <td>{{val.mom_idcard}}</td>   
+              <td>{{val.patient_dad}}</td>   
+              <td>{{val.dad_idcard}}</td>   
+              <td>{{val.patient_spouse}}</td>   
+              <td>{{val.spouse_idcard}}</td>  
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+    
+ <!-- Modal Update-->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form >
+          <!-- <div class="mb-3">
+            <label htmlFor="idpatient" Class="form-lable">
+             ID:
+            </label>
+            <input ng-model = "f2.idpatient"
+              type="text"
+              class="form-control"
+              placeholder="กรุณากรอกเลขประจำตัวผู้ป่วย"
+            />
+          </div> -->
+          <div class="mb-3">
+            <label htmlFor="HN" Class="form-lable">
+              HN:
+            </label>
+            <input ng-model = "f2.HN"
+              type="text"
+              class="form-control"
+              placeholder="กรุณากรอกเลขประจำตัวผู้ป่วย"
+            />
+          </div>
+          <div class="mb-3">
+            <label htmlFor="name" Class="form-lable">
+              ชื่อผู้ป่วย:
+            </label>
+            <input ng-model = "f2.patient_name"
+              type="text"
+              class="form-control"
+              placeholder="กรุณากรอกชื่อผู้ป่วย"       
+            />
+          </div>
+          <div class="mb-3">
+            <label htmlFor="lastname" Class="form-lable">
+              นามสกุลผู้ป่วย:
+            </label>
+            <input ng-model = "f2.patient_lastname"
+              type="text" 
+              class="form-control"
+              placeholder="กรุณากรอกนามสกุลผู้ป่วย"
+            />
+          </div>
+          <!-- <div class="mb-3">
+            <label htmlFor="birthday" Class="form-lable">
+              วัน/เดือน/ปีเกิด:
+            </label>
+            <input ng-model = "f2.patient_birthday"
+              type="date"
+              placeholder="dd-mm-yyyy" value="{{f2.patient_birthday | date:'yyyy-MM-dd'}}" min="1886-01-01" max="2025-12-31"
+              class="form-control"
+              
+            />
+          </div> -->
+          <div class="mb-3">
+            <label htmlFor="birthday" Class="form-lable">
+              วัน/เดือน/ปีเกิด:
+            </label>
+            <input ng-model = "f2.patient_birthday2"
+              type="date"
+              placeholder="dd-mm-yyyy" value="{{f2.patient_birthday | date:'yyyy-MM-dd'}}"  min="1886-01-01" max="2024-01-01"
+              class="form-control" 
+            />
+          </div>
+          <div class="mb-3">
+            <label htmlFor="idcard" Class="form-lable">
+              เลขประจำตัวประชาชน:
+            </label>
+            <input ng-model = "f2.patient_idcard"
+              type="text" 
+              class="form-control"
+              placeholder="กรุณากรอกเลขประจำตัวประชาชนผู้ป่วย"
+            />
+          </div>
+          <div class="mb-3">
+            <label htmlFor="sex" Class="form-lable">
+              เพศ:
+            </label> {{f3.patient_sex}}
+            <select class="mb-3" ng-model = "f3.patient_sex">
+              <option value="1" ng-selected="'1' == f3.patient_sex">ชาย</option>
+              <option value="2" ng-selected="'2' == f3.patient_sex">หญิง</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label htmlFor="phone" Class="form-lable">
+              เบอร์โทรศัพท์:
+            </label>
+            <input ng-model = "f2.patient_phone"
+              type="text"
+              class="form-control"
+              placeholder="กรุณากอกเบอร์โทรศัพท์ของผู้ป่วย"
+            />
+          </div>
+          <div class="mb-3">
+            <label htmlFor="address" Class="form-lable">
+              ที่อยู่:
+            </label>
+            <input ng-model = "f2.patient_address"
+              type="text"
+              class="form-control"
+              placeholder="กรุณากรอกที่อยู่"
+            />
+          </div>
+          <div class="mb-3">
+            <label htmlFor="blood" Class="form-lable">
+              กรุ๊ปเลือด:
+            </label>
+            <input ng-model = "f2.patient_blood"
+              type="text"
+              class="form-control"
+              placeholder="กรุณากรอกกรุ๊ปเลือด"
+            />
+          </div>
+          <div class="mb-3">
+            <label htmlFor="nation" Class="form-lable">
+              สัญชาติ:
+            </label>
+            <select class="mb-3" ng-model = "f3.patient_nation">
+              <option value="1" ng-selected="'1' == f3.patient_nation">ไทย</option>
+              <option value="2" ng-selected="'2' == f3.patient_nation">อื่น ๆ</option>
+            </select>
+            <!-- <input ng-model = "f2.patient_nation"
+              type="text"
+              class="form-control"
+              placeholder="กรุณากรอกสัญชาติ"
+            /> -->
+          </div>
+          <div class="mb-3">
+            <label htmlFor="race" Class="form-lable">
+              เชื้อชาติ:
+            </label>
+            <select class="mb-3" ng-model = "f3.patient_race">
+              <option value="1" ng-selected="'1' == f3.patient_race">ไทย</option>
+              <option value="2" ng-selected="'2' == f3.patient_race">อื่น ๆ</option>
+            </select>
+            <!-- <input ng-model = "f2.patient_race"
+              type="text"
+              class="form-control"
+              placeholder="กรุณากรอกเชื้อชาติ"
+            /> -->
+          </div>
+          <div class="mb-3">
+            <label htmlFor="religion" Class="form-lable">
+              ศาสนา:
+            </label>
+            <select class="mb-3" ng-model = "f3.patient_religion">
+              <option value="1" ng-selected="'1' == f3.patient_religion">ศาสนาพุทธ</option>
+              <option value="2" ng-selected="'2' == f3.patient_religion">ศาสนาคริสต์</option>
+              <option value="3" ng-selected="'3' == f3.patient_religion">ศาสนาอิสลาม</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label htmlFor="degree" Class="form-lable">
+              วุฒิการศึกษา:
+            </label>
+            <select class="mb-3" ng-model = "f3.patient_degree">
+              <option value="1" ng-selected="'1' == f3.patient_degree">ประถมศึกษา</option>
+              <option value="2" ng-selected="'2' == f3.patient_degree">มัธยมศึกษา</option>
+              <option value="3" ng-selected="'3' == f3.patient_degree">อาชีวศึกษา</option>
+              <option value="4" ng-selected="'4' == f3.patient_degree">อุดมศึกษา</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label htmlFor="marital" Class="form-lable">
+              สถานภาพสมรส:
+            </label>
+            <select class="mb-3" ng-model = "f3.patient_marital">
+              <option value="1" ng-selected="'1' == f3.patient_marital">จดทะเบียนสมรส</option>
+              <option value="2" ng-selected="'2' == f3.patient_marital">โสด</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label htmlFor="occupation" Class="form-lable">
+              อาชีพ:
+            </label>
+            <select class="mb-3" ng-model = "f3.patient_occupation">
+              <option value="1" ng-selected="'1' == f3.patient_occupation">ค้าขาย</option>
+              <option value="2" ng-selected="'2' == f3.patient_occupation">เกษตรกร</option>
+              <option value="3" ng-selected="'3' == f3.patient_occupation">ธุรกิจส่วนตัว</option>
+              <option value="4" ng-selected="'4' == f3.patient_occupation">ข้าราชการ</option>
+              <option value="5" ng-selected="'5' == f3.patient_occupation">นักเรียน</option>
+              <option value="6" ng-selected="'6' == f3.patient_occupation">อื่น ๆ</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label htmlFor="right" Class="form-lable">
+              สิทธิ:
+            </label>
+            <select class="mb-3" ng-model = "f3.patient_right">
+              <option value="1" ng-selected="'1' == f3.patient_right">เด็กทารก ( 30 บาทเดิม )</option>
+              <option value="2" ng-selected="'2' == f3.patient_right">ช่วงอายุ 12 - 59 ปี ( 30 บาทเดิม )</option>
+              <option value="3" ng-selected="'3' == f3.patient_right">ผู้สูงอายุ ( อายุ 60 ปีบริบูรณ์ขึ้นไป )</option>
+              <option value="4" ng-selected="'4' == f3.patient_right">บุคคลในครอบครัวของผู้นำชุมชน (กำนัน,สารวัตรกำนัน,ผญบ.,ผช.,แพทย์ประจำหมู่บ้าน)</option>
+              <option value="5" ng-selected="'5' == f3.patient_right">อื่น ๆ</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label htmlFor="mom_name" Class="form-lable">
+              ชื่อมารดา:
+            </label>
+            <input ng-model = "f3.patient_mom"
+              type="text"
+              class="form-control"
+              placeholder="กรุณากรอกชื่อมารดา"
+            />
+          </div>
+          <div class="mb-3">
+            <label htmlFor="mom_idcard" Class="form-lable">
+              บัตรประจำตัวประชาชนมารดา:
+            </label>
+            <input ng-model = "f3.mom_idcard"
+              type="text"
+              class="form-control"
+              placeholder="กรุณากรอกบัตรประจำตัวประชาชนมารดา"
+            />
+          </div>
+          <div class="mb-3">
+            <label htmlFor="dad_name" Class="form-lable">
+              ชื่อบิดา:
+            </label>
+            <input ng-model = "f3.patient_dad"
+              type="text"
+              class="form-control"
+              placeholder="กรุณากรอกชื่อบิดา"
+            />
+          </div>
+          <div class="mb-3">
+            <label htmlFor="dad_idcard" Class="form-lable">
+              บัตรประจำตัวประชาชนบิดา:
+            </label>
+            <input ng-model = "f3.dad_idcard"
+              type="text"
+              class="form-control"
+              placeholder="กรุณากรอกบัตรประจำตัวประชาชนบิดา"
+            />
+          </div>
+          <div class="mb-3">
+            <label htmlFor="spouse_name" Class="form-lable">
+              ชื่อคู่สมรส:
+            </label>
+            <input ng-model = "f3.patient_spouse"
+              type="text"
+              class="form-control"
+              placeholder="กรุณากรอกชื่อคู่สมรส"
+            />
+          </div>
+          <div class="mb-3">
+            <label htmlFor="spouse_idcard" Class="form-lable">
+              บัตรประจำตัวประชาชนคู่สมรส:
+            </label>
+            <input ng-model = "f3.spouse_idcard"
+              type="text"
+              class="form-control"
+              placeholder="กรุณากรอกบัตรประจำตัวประชาชนคู่สมรส"
+            />
+          </div>
+          <div class="mb-3">
+            <label htmlFor="password" Class="form-lable">
+              รหัสผ่าน:
+            </label>
+            <input ng-model = "f3.patient_password"
+              type="text"
+              class="form-control"
+              placeholder="กรุณากรอกรหัสผ่าน"
+            />
+          </div>
+        </form> {{f3}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" ng-click ="update()" class="btn btn-primary" data-bs-dismiss="modal">แก้ไขข้อมูลผู้ป่วย</button>
+      </div>
+    </div>
+  </div>
+</div> 
+
+      <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+   เพิ่มผู้ป่วยรายใหม่ 
+  </button>
+  <!-- Modal insert-->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content modal-lg modal-dialog-scrollable">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="d-flex justify-content-center aligh items-center vh-100">
+                <div class="card w-70">
+                  <h1 class="text-center">ข้อมูล</h1>
+                  <div class="card-body">
+                    <form >
+                      <div class="mb-3">
+                        <label htmlFor="HN" Class="form-lable">
+                          HN:
+                        </label>
+                        <input ng-model = "f.HN"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกเลขประจำตัวผู้ป่วย"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="name" Class="form-lable">
+                          ชื่อผู้ป่วย:
+                        </label>
+                        <input ng-model = "f.name"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกชื่อผู้ป่วย"       
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="lastname" Class="form-lable">
+                          นามสกุลผู้ป่วย:
+                        </label>
+                        <input ng-model = "f.lastname"
+                          type="text" 
+                          class="form-control"
+                          placeholder="กรุณากรอกนามสกุลผู้ป่วย"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="idcard" Class="form-lable">
+                          เลขประจำตัวประชาชน:
+                        </label>
+                        <input ng-model = "f.idcard"
+                          type="text" 
+                          class="form-control"
+                          placeholder="กรุณากรอกเลขประจำตัวประชาชนผู้ป่วย"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="sex" Class="form-lable">
+                          เพศ:
+                        </label>
+                        <select class="mb-3" ng-model = "f.sex">
+                          <option value="1">ชาย</option>
+                          <option value="2">หญิง</option>
+                        </select>
+                        <!-- <input ng-model = "f.sex"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกเพศ"
+                        /> -->
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="birthday" Class="form-lable">
+                          วัน/เดือน/ปีเกิด:
+                        </label>
+                        <input ng-model = "f.birthday"
+                          type="date"
+                          class="form-control"
+                          placeholder="กรุณากรอกวันเดือนปีเกิด" value="{{f.birthday | date:'yyyy-MM-dd'}}" min="1886-01-01" max="2025-12-31"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="phone" Class="form-lable">
+                          เบอร์โทรศัพท์:
+                        </label>
+                        <input ng-model = "f.phone"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากอกเบอร์โทรศัพท์ของผู้ป่วย"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="address" Class="form-lable">
+                          ที่อยู่:
+                        </label>
+                        <input ng-model = "f.address"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกที่อยู่"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="blood" Class="form-lable">
+                          กรุ๊ปเลือด:
+                        </label>
+                        <input ng-model = "f.blood"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกกรุ๊ปเลือด"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="nation" Class="form-lable">
+                          สัญชาติ:
+                        </label>
+                        <select class="mb-3" ng-model = "f.nation">
+                          <option value="1">ไทย</option>
+                          <option value="2">อื่น ๆ</option>
+                        </select>
+                        <!-- <input ng-model = "f.nation"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกสัญชาติ"
+                        /> -->
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="race" Class="form-lable">
+                          เชื้อชาติ:
+                        </label>
+                        <select class="mb-3" ng-model = "f.race">
+                          <option value="1">ไทย</option>
+                          <option value="2">อื่น ๆ</option>
+                        </select>
+                        <!-- <input ng-model = "f.race"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกเชื้อชาติ"
+                        /> -->
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="religion" Class="form-lable">
+                          ศาสนา:
+                        </label>
+                        <select class="mb-3" ng-model = "f.religion">
+                          <option value="1">ศาสนาพุทธ</option>
+                          <option value="2">ศาสนาคริสต์</option>
+                          <option value="3">ศาสนาอิสลาม</option>
+                        </select>
+                        <!-- <input ng-model = "f.religion"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกศาสนา"
+                        /> -->
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="degree" Class="form-lable">
+                          วุฒิการศึกษา:
+                        </label>
+                        <select class="mb-3" ng-model = "f.degree">
+                          <option value="1">ประถมศึกษา</option>
+                          <option value="2">มัธยมศึกษา</option>
+                          <option value="3">อาชีวศึกษา</option>
+                          <option value="4">อุดมศึกษา</option>
+                        </select>
+                        <!-- <input ng-model = "f.degree"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกวุฒิการศึกษา"
+                        /> -->
+                      </div> 
+                      <div class="mb-3">
+                        <label htmlFor="marital" Class="form-lable">
+                          สถานภาพสมรส:
+                        </label>
+                        <select class="mb-3" ng-model = "f.marital">
+                          <option value="1">จดทะเบียนสมรส</option>
+                          <option value="2">โสด</option>
+                        </select>
+                        <!-- <input ng-model = "f.marital"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกสถานภาพสมรส"
+                        /> -->
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="occupation" Class="form-lable">
+                          อาชีพ:
+                        </label>
+                        <select class="mb-3" ng-model = "f.occupation">
+                          <option value="1">ค้าขาย</option>
+                          <option value="2">เกษตรกร</option>
+                          <option value="3">ธุรกิจส่วนตัว</option>
+                          <option value="4">ข้าราชการ</option>
+                          <option value="5">นักเรียน</option>
+                          <option value="6">อื่น ๆ</option>
+                        </select>
+                        <!-- <input ng-model = "f.occupation"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกอาชีพ"
+                        /> -->
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="right" Class="form-lable">
+                          สิทธิ:
+                        </label>
+                        <select class="mb-3" ng-model = "f.right">
+                          <option value="1">เด็กทารก ( 30 บาทเดิม )</option>
+                          <option value="2">ช่วงอายุ 12 - 59 ปี ( 30 บาทเดิม )</option>
+                          <option value="3">ผู้สูงอายุ ( อายุ 60 ปีบริบูรณ์ขึ้นไป )</option>
+                          <option value="4">บุคคลในครอบครัวของผู้นำชุมชน (กำนัน,สารวัตรกำนัน,ผญบ.,ผช.,แพทย์ประจำหมู่บ้าน)</option>
+                          <option value="5">อื่น ๆ</option>
+                        </select>
+                        <!-- <input ng-model = "f.right"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกสิทธิ"
+                        /> -->
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="mom_name" Class="form-lable">
+                          ชื่อมารดา:
+                        </label>
+                        <input ng-model = "f.mom_name"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกชื่อมารดา"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="mom_idcard" Class="form-lable">
+                          บัตรประจำตัวประชาชนมารดา:
+                        </label>
+                        <input ng-model = "f.mom_idcard"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกบัตรประจำตัวประชาชนมารดา"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="dad_name" Class="form-lable">
+                          ชื่อบิดา:
+                        </label>
+                        <input ng-model = "f.dad_name"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกชื่อบิดา"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="dad_idcard" Class="form-lable">
+                          บัตรประจำตัวประชาชนบิดา:
+                        </label>
+                        <input ng-model = "f.dad_idcard"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกบัตรประจำตัวประชาชนบิดา"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="spouse_name" Class="form-lable">
+                          ชื่อคู่สมรส:
+                        </label>
+                        <input ng-model = "f.spouse_name"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกชื่อคู่สมรส"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="spouse_idcard" Class="form-lable">
+                          บัตรประจำตัวประชาชนคู่สมรส:
+                        </label>
+                        <input ng-model = "f.spouse_idcard"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกบัตรประจำตัวประชาชนคู่สมรส"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label htmlFor="password" Class="form-lable">
+                          รหัสผ่าน:
+                        </label>
+                        <input ng-model = "f.password"
+                          type="text"
+                          class="form-control"
+                          placeholder="กรุณากรอกรหัสผ่าน"
+                        />
+                      </div>
+          
+                    </form>
+                  </div>
+                </div>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" ng-click ="insert()" class="btn btn-primary" data-bs-dismiss="modal">เพิ่มข้อมูลผู้ป่วย</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+      <!-- Modal popup-->
+<!-- Button trigger modal -->
+<!-- Modal -->
+<div class="modal fade" id="popup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{a}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+   <!-- <button type="button" class="btn btn-secondary" ng-click="test()">Close</button> -->
+
+</body>
+</html>

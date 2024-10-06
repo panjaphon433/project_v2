@@ -1,0 +1,46 @@
+SET @a = (SELECT MAX(`iddisease`)+1 FROM `disease`);
+INSERT INTO `disease`(`iddisease`, `disease_name`) VALUES ('[value-1]','[value-2]')
+
+SET @a = (SELECT MAX(`HN`)+1 FROM `patient`);
+        INSERT INTO `patient` 
+                    (`HN`, 
+                     `patient_name`, 
+                     `patient_lastname`, 
+                     `patient_phone`, 
+                     `patient_address`,
+                     `patient_birthday`,
+                     `patient_idcard`, 
+                     `patient_blood`, 
+                     `patient_password`) 
+        VALUES 
+            (@a, 
+            'qq', 
+            'qq',
+            '1', 
+            '1',
+            '2024-02-08', 
+            'qq',
+            'B',  
+            '12'); 
+
+
+
+            <?php
+            if ($_SESSION["check"] == 2){ ?>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" ng-click="showupdatefrom(val)" data-bs-target="#staticBackdrop">เพิ่มประวัติการรักษาพยาบาล</button>
+            <?php }  else {
+
+            }?>
+            else if ($_SESSION["admin_position"] != "แพทย์" ) {
+  header("location:../home.php");
+  exit();
+}
+
+
+<?php
+if ($_SESSION["check_position"] == "แพทย์") { ?>
+  <button type="button" class="btn btn-warning" data-bs-toggle="modal" ng-click="showupdatefrom(val)" data-bs-target="#updateModal"><i class="bi bi-pen"></i>แก้ไข</button>
+  <button type="button" class="btn btn-danger" data-bs-toggle="modal" ng-click="confirmDelete(val)" data-bs-target="#popupDelete"><i class="bi bi-trash"></i>ลบ</button>
+<?php } else {
+  echo "ไม่มีสิทธิ์แก้ไขข้อมูลประวัติการรักษา";
+} ?>

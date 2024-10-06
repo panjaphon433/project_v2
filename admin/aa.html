@@ -1,0 +1,83 @@
+<form >
+    <div class="mb-3">
+     <label htmlFor="HN" Class="form-lable">
+       HN:
+     </label>
+     <input ng-model = "f2.HN"
+       type="text"
+       class="form-control"
+       placeholder="กรุณากรอกเลขประจำตัวผู้ป่วย"
+     />
+   </div>
+   <div class="mb-3">
+     <label htmlFor="name" Class="form-lable">
+       ผู้ป่วย : {{f2.patient_name}} {{f2.patient_lastname}}
+     </label>
+   </div>
+   <div class="mb-3">
+     <label htmlFor="date" Class="form-lable">
+       วัน/เดือน/ปีที่นัด:
+     </label>
+     <input ng-model = "f2.appointment_date"
+       type="date"
+       class="form-control"
+       placeholder="กรุณากรอกวันเดือนปีที่นัด"  min="2024-01-01" 
+     />
+   </div>
+   <div class="mb-3"> <!-- เช้า บ่าย -->
+     <label htmlFor="time" >
+       เวลานัด:
+     </label>
+     <select class="mb-3" ng-model = "f2.appointment_time">
+       <option value="1">ช่วงเช้า เวลา 08:00 น. - 12:00 น.</option>
+       <option value="2">ช่วงบ่าย เวลา 13:00 น. - 16:00 น.</option>
+     </select>
+   </div>
+   <div class="mb-3">
+     <label htmlFor="reason" >
+       สาเหตุการนัด:
+     </label>
+     <select class="mb-3" ng-model = "f2.appointment_reason">
+       <option value="1">รับยา</option>
+       <option value="2">ฟังผล (Follow Up)</option>
+       <option value="3">ทำแผล / ล้างแผล</option>
+       <option value="4">เจาะเลือด (ตรวจโรคฯ)</option>
+       <option value="5">ตรวจน้ำตาล (DTX)</option>
+       <option value="6">วัดความดันฯ</option>
+       <option value="7">แพทย์แผนไทย</option>
+       <option value="8">ทันตกรรม</option>
+     </select>
+   </div>
+   <div class="mb-3">   <!-- select menu ห้องยา ห้องทันต ห้องทำแผล อะไรงี้-->
+     <label htmlFor="location" Class="form-lable">
+       สถานที่นัดหมาย:
+     </label>
+     <select class="mb-3" ng-model = "f2.appointment_location"">
+       <option value="1">ห้องรับยา</option>
+       <option value="2">คลินิคทันตกรรม </option>
+       <option value="3">ห้องทำแผล / ล้างแผล</option>
+       <option value="4">คลินิคแพทย์แผนไทย</option>    
+       <option value="4">ห้องตรวจโรค</option>   
+     </select>
+   </div>
+   <div class="mb-3">
+     <label htmlFor="admin" Class="form-lable">
+       ผู้นัด:
+     </label>
+     <input ng-model = "f2.admin" 
+       type="text"
+       class="form-control"
+       placeholder="กรุณากรอกผู้นัด" value="{{admin}}" 
+     />
+       <!-- ตัวแปรรับมาจาก "admin" login php-->
+   </div>
+ </form>
+
+ <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" ng-click ="insert()" class="btn btn-primary" data-bs-dismiss="modal">เพิ่มข้อมูลการนัดหมาย</button>
+
+
+          ย้อนกลับ
+          <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='profile.php'">ย้อนกลับ</button>
+          </div>        
